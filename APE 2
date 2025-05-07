@@ -1,0 +1,246 @@
+INFORME DE GUÍA PRÁCTICA
+
+I.	PORTADA
+Tema: 					Tema de
+Unidad de Organización Curricular:	BÁSICA
+Nivel y Paralelo:			5 “A”
+Alumnos participantes:			Cabrera Curco Franklin Daniel
+Asignatura:				Sistemas de Bases de Datos Distribuidas	
+Docente:				Ing. José Rubén Caiza Mg.
+
+II.	INFORME DE GUÍA PRÁCTICA
+1.	PP
+2.	YY
+2.1	Objetivos
+
+General:
+Implementar y validar operaciones de bases de datos distribuidas en SQL Server, aplicando transacciones, integridad referencial y manejo de errores para garantizar la consistencia de los datos.
+
+Específicos:
+•	 Crear y gestionar transacciones atómicas para asegurar que operaciones múltiples se completen exitosamente o se reviertan en caso de error.
+•	Verificar la integridad referencial entre tablas relacionadas mediante claves primarias y foráneas.
+•	Manejar errores con TRY-CATCH para controlar excepciones durante operaciones críticas.
+
+2.2	Modalidad
+•	Práctica guiada en laboratorio con supervisión del docente.
+•	Individual o en equipos de 2 personas (según indicaciones del profesor).
+
+
+2.3	Tiempo de duración
+•	Presenciales: 2 horas (tiempo en clase).
+•	No presenciales: 1 hora adicional para redacción del informe.
+
+
+2.4	Instrucciones
+1.	Conectarse a SQL Server Management Studio (SSMS).
+2.	Ejecutar scripts SQL proporcionados en la guía.
+3.	Documentar resultados y capturas de pantalla.
+4.	Validar cada paso con el docente antes de continuar.
+
+2.5	Listado de equipos, materiales y recursos 
+•	Computador con Windows/Linux/macOS.
+•	SQL Server Management Studio (SSMS) instalado.
+•	Acceso a la base de datos CentroMedicoDB.
+
+TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la guía práctica:
+☒Plataformas educativas
+☒Simuladores y laboratorios virtuales
+☐Aplicaciones educativas
+☒Recursos audiovisuales
+☐Gamificación
+☐Inteligencia Artificial
+Otros (Especifique): _____________________
+
+2.6	Actividades por desarrollar
+1. Verificar conexión y estructura de la base de datos
+- Abrimos SQL Server Management Studio (SSMS) y nos conectamos al servidor.  
+- Seleccionamos la base de datos "CentroMedicoDB".  
+- Verificamos las tablas existentes ejecutando:  
+  SELECT * FROM INFORMATION_SCHEMA.TABLES;  
+   
+
+2. Probar integridad referencial con datos existentes
+- Ejemplo 1: Insertamos un médico con una especialidad inexistente:    
+INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID, Email, Telefono)  
+VALUES ('Luis', 'Gómez', 2, 1, 'luis@mail.com', '987654321');  
+    
+
+Ejemplo 2: Intentar eliminar una especialidad en uso (Pediatría, ID=1):
+DELETE FROM Especialidades WHERE EspecialidadID = 1;  
+ 
+
+2. Transacciones con atomicidad (Commit y Rollback)  
+Transacción exitosa: Crear un centro médico y asignar un médico:
+BEGIN TRANSACTION;
+    INSERT INTO CentrosMedicos (Nombre, Ciudad, Direccion, Telefono)  
+    VALUES ('Clínica Norte', 'Quito', 'Av. Principal 123', '022222222');  
+
+    DECLARE @NuevoCentroID INT = SCOPE_IDENTITY();  
+
+    INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID, Email)  
+    VALUES ('Marta', 'Vega', 3, @NuevoCentroID, 'marta@clinicanorte.ec');  
+COMMIT TRANSACTION;  
+
+-- Verificar datos
+SELECT * FROM CentrosMedicos WHERE Nombre = 'Clínica Norte';  
+SELECT * FROM Medicos WHERE Nombre = 'Marta';
+ 
+Transacción fallida: Intentar asignar un médico a un centro inexistente:
+BEGIN TRANSACTION;
+    DELETE FROM Especialidades WHERE EspecialidadID = 3; -- Especialidad en uso por "Marta Vega"
+ROLLBACK TRANSACTION; -- Revierte la operación 
+ 
+________________________________________
+3. Pruebas concurrentes
+Sesión 1 (Actualización):
+BEGIN TRANSACTION;
+    UPDATE Medicos SET Email = 'marta.nuevo@clinicanorte.ec' WHERE Nombre = 'Marta';
+    -- Mantener la transacción abierta (sin COMMIT)
+ 
+
+
+
+Sesión 2 (Lectura):
+SELECT * FROM Medicos WHERE Nombre = 'Marta'; -- Bloqueado hasta que Sesión 1 finalice
+ 
+4. Manejo de errores con TRY...CATCH
+Ejemplo: Insertar una consulta con un ClientelD inexistente.sql
+BEGIN TRY  
+    BEGIN TRANSACTION;  
+        INSERT INTO Consultas (MedicoID, ClienteID, FechaConsulta)  
+        VALUES (1, 9999, GETDATE());  
+    COMMIT TRANSACTION;  
+END TRY  
+BEGIN CATCH  
+    ROLLBACK TRANSACTION;  
+    PRINT 'Error: ' + ERROR_MESSAGE();  
+END CATCH;  
+ 
+
+5. Verificación final
+Consultar datos nuevos:
+-- Verificar el nuevo centro médico  
+SELECT * FROM CentrosMedicos WHERE Nombre = 'Clínica Norte';  
+
+-- Verificar el médico asignado al nuevo centro  
+SELECT * FROM Medicos WHERE Nombre = 'Marta' AND Apellido = 'Vega';  
+ 
+
+2.7	Resultados obtenidos
+•	Transacción exitosa:
+o	Se insertó el centro médico "Clínica Norte" y se asignó la médica "Marta Vega".
+o	La atomicidad de la transacción se cumplió: ambas operaciones se ejecutaron como una sola unidad.
+
+2.8	Habilidades blandas empleadas en la práctica
+
+☐ Liderazgo
+☐ Trabajo en equipo
+☐ Comunicación asertiva
+☐ La empatía
+☒ Pensamiento crítico
+☐ Flexibilidad
+☒ La resolución de conflictos
+☒ Adaptabilidad
+☒ Responsabilidad
+
+2.9	Conclusiones
+•	Las transacciones garantizan que operaciones múltiples se ejecuten de manera atómica, evitando estados inconsistentes.
+•	El uso de SCOPE_IDENTITY() asegura la correcta relación entre tablas con claves foráneas.
+
+2.10	Recomendaciones
+•	Validar siempre la existencia de claves foráneas antes de insertar datos.
+•	Usar transacciones en operaciones críticas que involucren múltiples tablas.
+
+
+
+
+2.11	Referencias bibliográficas
+[1] Microsoft Docs, "Claves foráneas en SQL Server", 2023. [En línea]. Disponible: https://docs.microsoft.com/es-es/sql/relational-databases/tables/create-foreign-key-relationships.
+[2] SQL Server Tutorial, "Manejo de errores con TRY CATCH", 2023. [En línea]. Disponible: https://www.sqlservertutorial.net/.
+
+2.12	Anexos 
+•	Scripts SQL completos usados en la práctica.
+•	USE CentroMedicoDB;  -- Selecciona tu base de datos
+•	GO
+•	SELECT * FROM INFORMATION_SCHEMA.TABLES; 
+•	
+•	INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID, Email, Telefono)  
+•	VALUES ('Luis', 'Gómez', 2, 1, 'luis@mail.com', '987654321'); 
+•	
+•	SET IDENTITY_INSERT Medicos OFF; -- Restaura el autoincremento
+•	
+•	-- Formato correcto (omitir MedicoID)
+•	INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID, Email, Telefono)  
+•	VALUES ('Luis', 'Gómez', 2, 1, 'luis@mail.com', '987654321');  
+•	SELECT * FROM Medicos WHERE Nombre = 'Luis' AND Apellido = 'Gómez'; 
+•	
+•	DELETE FROM Especialidades WHERE EspecialidadID = 1; 
+•	
+•	BEGIN TRANSACTION;
+•	    INSERT INTO CentrosMedicos (Nombre, Ciudad, Direccion, Telefono)  
+•	    VALUES ('Clínica Norte', 'Quito', 'Av. Principal 123', '022222222');  
+•	
+•	    DECLARE @NuevoCentroID INT = SCOPE_IDENTITY();  
+•	
+•	    INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID, Email)  
+•	    VALUES ('Marta', 'Vega', 3, @NuevoCentroID, 'marta@clinicanorte.ec');  
+•	COMMIT TRANSACTION;  
+•	
+•	-- Verificar datos
+•	SELECT * FROM CentrosMedicos WHERE Nombre = 'Clínica Norte';  
+•	SELECT * FROM Medicos WHERE Nombre = 'Marta';  
+•	
+•	BEGIN TRANSACTION;
+•	    DELETE FROM Especialidades WHERE EspecialidadID = 3; -- Especialidad en uso por "Marta Vega"
+•	ROLLBACK TRANSACTION; -- Revierte la operación
+•	
+•	BEGIN TRANSACTION;
+•	    UPDATE Medicos SET Email = 'marta.nuevo@clinicanorte.ec' WHERE Nombre = 'Marta';
+•	    -- Mantener la transacción abierta (sin COMMIT)
+•	
+•	SELECT * FROM Medicos WHERE Nombre = 'Marta'; -- Bloqueado hasta que Sesión 1 finalice
+•	
+•	BEGIN TRY  
+•	    BEGIN TRANSACTION;  
+•	        INSERT INTO Consultas (MedicoID, ClienteID, FechaConsulta)  
+•	        VALUES (1, 9999, GETDATE());  
+•	    COMMIT TRANSACTION;  
+•	END TRY  
+•	BEGIN CATCH  
+•	    ROLLBACK TRANSACTION;  
+•	    PRINT 'Error: ' + ERROR_MESSAGE();  
+•	END CATCH;  
+•	
+•	-- Centros médicos nuevos  
+•	SELECT * FROM CentrosMedicos WHERE CentroID = 10;  
+•	
+•	-- Médicos asignados al nuevo centro  
+•	SELECT * FROM Medicos WHERE CentroID = 10;
+•	
+•	DECLARE @NuevoCentroID INT;
+•	INSERT INTO CentrosMedicos (Nombre, Ciudad, Direccion, Telefono) 
+•	VALUES ('Clínica Norte', 'Quito', 'Av. Principal 123', '022222222');
+•	SET @NuevoCentroID = SCOPE_IDENTITY(); -- Obtiene el ID generado
+•	
+•	
+•	
+•	
+•	BEGIN TRANSACTION;
+•	    INSERT INTO CentrosMedicos (Nombre, Ciudad, Direccion, Telefono) 
+•	    VALUES ('Clínica Norte', 'Quito', 'Av. Principal 123', '022222222');
+•	    
+•	    DECLARE @NuevoCentroID INT = SCOPE_IDENTITY();
+•	    
+•	    INSERT INTO Medicos (Nombre, Apellido, EspecialidadID, CentroID) 
+•	    VALUES ('Marta', 'Vega', 3, @NuevoCentroID);
+•	COMMIT TRANSACTION; -- ¡Confirmar los cambios!
+•	
+•	
+•	-- Verificar el nuevo centro médico  
+•	SELECT * FROM CentrosMedicos WHERE Nombre = 'Clínica Norte';  
+•	
+•	-- Verificar el médico asignado al nuevo centro  
+•	SELECT * FROM Medicos WHE
+•	Diagrama de relaciones entre tablas
+ 
+
