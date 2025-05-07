@@ -1,0 +1,172 @@
+APE 3 
+INFORME DE GUÍA PRÁCTICA
+I. PORTADA
+Tema: APE 3. REPLICACIÓN DE DATOS
+Unidad de Organización Curricular: BÁSICA
+Nivel y Paralelo: 5 – “A”
+Alumnos participantes: Cabrera Curco Franklin Daniel
+Asignatura: Sistemas de Bases de Datos Distribuidas
+Docente: Ing. José Rubén Caiza Caizabuano
+II. INFORME DE GUÍA PRÁCTICA 1. PP
+2. YY
+2.1 Objetivos
+General:
+• Comprender y aplicar los conceptos fundamentales de replicación de datos en SQL
+Server, mediante la configuración de publicaciones y suscripciones entre distintas
+instancias.
+Específicos:
+• Configurar una instancia como distribuidor y publicador.
+• Crear una publicación transaccional.
+• Establecer suscripciones desde otras instancias.
+• Validar la replicación de datos entre las instancias.
+2.2 Modalidad
+Presencial
+2.3 Tiempo de duración
+Presenciales: 6
+No presenciales: 0
+2.4 Instrucciones
+• Verifique que está instalado SQL Server (instancia por defecto)
+• Verifique que estén instaladas 2 instancias adicionales Sitio_A y Sitio_B..
+2.5 Listado de equipos, materiales y recursos
+• Computadoras con Windows 10 o superior
+• SQL Server Management Studio (SSMS)
+• Motor de base de datos SQL Server
+• Instancias adicionales de SQL Server (Sitio_A y Sitio_B)
+• Base de datos “AUTOFLOTILLA” previamente creada
+TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la guía práctica:
+☒Plataformas educativas
+☐Simuladores y laboratorios virtuales
+☒Aplicaciones educativas
+☒Recursos audiovisuales
+☐Gamificación
+☒Inteligencia Artificial
+Otros (Especifique): Documentación oficial de Microsoft
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+2.6 Actividades por desarrollar
+1. Se verificó que SQL Server y las instancias adicionales (Sitio_A y Sitio_B) estuvieran
+correctamente instaladas y funcionando.
+2. Se aseguró que los servicios relacionados con SQL Server estuvieran en ejecución,
+especialmente el Agente de SQL Server, fundamental para la replicación.
+3. Se accedió a SQL Server Management Studio y se conectó a la instancia por defecto.
+4. Se configuró esta instancia para actuar como Distribuidor y Publicador. Esto se realizó
+haciendo clic derecho en la carpeta “Replication” y seleccionando la opción de configurar
+distribución.
+5. Posteriormente, se creó una nueva publicación sobre la base de datos
+“AUTOFLOTILLA”. En el asistente, se seleccionó el tipo de publicación “Transactional
+publication”, permitiendo que las suscripciones puedan recibir cambios de forma
+inmediata.
+6. Se agregó el agente de la publicación para gestionar el flujo de datos.
+7. Luego, se creó una suscripción desde la misma instancia, seleccionando la publicación
+creada anteriormente. En este paso, se usó la opción “Find SQL Server Publisher” para
+detectar la instancia publicadora.
+8. Una vez conectados, se especificó la base de datos de destino en Sitio_A y Sitio_B.
+9. Para comprobar la replicación, se agregó un nuevo registro a la tabla publicada en la base
+de datos de la instancia principal.
+10. Se verificó que el nuevo dato se replicara correctamente tanto en Sitio_A como en Sitio_B
+2.7 Resultados obtenidos
+- Configuraciones previas
+o Al crear las instancias se debe dar clic en la celda de SQL Server Replication
+o Los servicios relacionados con SQL deben estar En Ejecución
+o
+Conéctamos al motor de base de datos.
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+Activamos la instancia principal o por defecto.
+▪ Debemos asegurarnos que el agente este actuivo
+Configuramos la instancia para ser Distribuidor y Publicador.
+1. Vamos a dar clic derecho en la carpeta de nuestra instancia por defecto que
+dice Replication
+2.
+
+1. Damos clic derecho en la carpeta y damos clic en New Publication
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+2. Escogemos la base de datos de AUTOFLOTILLA y damos en Next
+3. Damos clic en Transactional pivlication para que la instancia inscrita
+futura pueda ingresar datos, y clc en next
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+4. Agregamos el agente
+Creamos una subscripción en la instancia principal, a la publicación creada anteriormente.
+1. Clic derecho en la publicación que creamos anteriormente, y clic en New
+Subscrptions.
+2.
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+3.
+4. Luego seleccionamos <Find SQL Server Publisher>
+• Confirmamos la cuenta, vamos clic en conect
+5. Vamos a seleccionar o crear la Base de Datos de la instancia en este caso
+Ya la cree
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRER1. Si Vemos que ambas instancias tienen la replicación pues mostramos
+registros
+1. Vemos los datos de la tabla
+2. Agregar un dato a la tabla
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+✓ Despliegue la subscripción y verifique que los datos son exactamente los
+mismos a la publicación.
+1. INSTANCIA_A
+2. INSTANCIA_B
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+Resultados obtenidos:
+La replicación de datos se realizó exitosamente entre la instancia principal y las instancias
+Sitio_A y Sitio_B. Se logró comprobar que los datos insertados en la tabla publicada fueron
+reflejados de forma automática en ambas suscripciones, garantizando la sincronización entre los
+nodos.
+2.8 Habilidades blandas empleadas en la práctica
+☐ Liderazgo
+☐ Trabajo en equipo
+☐ Comunicación asertiva
+☐ La empatía
+☒ Pensamiento crítico
+☒ Flexibilidad
+☒ La resolución de conflictos
+☒ Adaptabilidad
+☒ Responsabilidad
+2.9 Conclusiones
+3. La implementación de la replicación de datos en SQL Server demostró ser una
+solución eficiente para la distribución automatizada de información entre diferentes
+servidores. Este tipo de configuración es clave en sistemas que requieren
+sincronización constante y confiabilidad en los datos.
+4. Durante la práctica se reforzaron habilidades técnicas esenciales, como la
+configuración de instancias, creación de publicaciones y suscripciones, así como la
+validación de la integridad de los datos replicados. Se comprobó que la replicación
+transaccional ofrece una respuesta rápida y eficaz ante la necesidad de compartir
+información en tiempo real.
+UNIVERSIDAD TÉCNICA DE AMBATO
+FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL
+CARRERA DE Elige un elemento.
+CICLO ACADÉMICO: MARZO – JULIO 2025
+4.1 Recomendaciones
+• Verificar siempre que los servicios de SQL Server estén activos antes de
+iniciar la replicación.
+• Mantener una política de respaldo en todas las instancias involucradas.
+• Usar replicación transaccional únicamente en escenarios donde se requiere alta
+consistencia y baja latencia.
+• Evitar cambios directos en tablas replicadas para no generar conflictos.
+4.2 Referencias bibliográficas
+.
+Coronel, C., & Morris, S. (2021). Database Systems: Design, Implementation, &
+Management. Cengage Learning.
+Melton, J. (2019). Advanced SQL: 1999 — Understanding Object-Relational and Other
+Advanced Features. Morgan Kaufmann.
+Microsoft Learn. (2024). Configuring Replication in SQL Server
